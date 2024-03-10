@@ -1,37 +1,37 @@
 pipeline {
-    agent {
-        label 'ubuntu-latest' // Specify the label for the Ubuntu agent
-    }
+    agent any
+
     stages {
         stage('Setting of runner') {
             steps {
-                echo 'runs-on: ubuntu-latest' // Echo the OS to confirm
+                echo 'runs-on: windows-latest'
             }
         }
 
         stage('Download and install Python') {
             steps {
-                sh 'sudo apt update' // Update package lists
-                sh 'sudo apt install -y python3 python3-pip' // Install Python and pip
-                sh 'python3 --version' // Check Python version
+                bat 'curl -o python-installer.exe https://www.python.org/ftp/python/3.10.2/python-3.10.2-amd64.exe'
+                bat 'start python-installer.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0'
+                // Wait for Python installation to complete
+                bat 'timeout 60'
             }
         }
 
         stage('Set up python environment') {
             steps {
-                sh 'python3 --version' // Check Python version again
+                bat 'python --version'
             }
         }
 
         stage('Installing dependencies') {
             steps {
-                sh 'pip3 install -r requirements.txt' // Install Python dependencies
+                bat 'pip install -r requirements.txt'
             }
         }
 
         stage('Executing test cases') {
             steps {
-                sh 'python3 main.py' // Execute main.py
+                bat 'python main.py'
             }
         }
     }
