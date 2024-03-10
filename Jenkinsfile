@@ -4,25 +4,25 @@ pipeline {
     stages {
         stage('Setting of runner') {
             steps {
-                echo 'runs-on: ubuntu-latest'
+                echo 'runs-on: windows-latest' // Assuming you are running Jenkins on a Windows agent
             }
         }
 
         stage('Set up python environment') {
             steps {
-                sh 'python3 --version'
+                bat 'python --version' // Using 'python' instead of 'python3' for Windows
             }
         }
 
         stage('Installing dependencies') {
             steps {
-                sh 'pip3 install -r requirements.txt'
+                bat 'pip install -r requirements.txt' // Using 'pip' instead of 'pip3' for Windows
             }
         }
 
         stage('Executing test cases') {
             steps {
-                sh 'main.py'
+                bat 'python main.py' // Assuming 'main.py' is the main script to execute
             }
         }
     }
