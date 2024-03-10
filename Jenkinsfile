@@ -22,7 +22,7 @@ pipeline {
 
         stage('Executing test cases') {
             steps {
-                sh 'pytest test.py'
+                sh 'main.py'
             }
         }
     }
