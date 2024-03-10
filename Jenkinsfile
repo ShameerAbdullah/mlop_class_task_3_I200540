@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -11,8 +10,27 @@ pipeline {
 
         stage('Download and install Python') {
             steps {
-                bat 'curl -o python-installer.exe https://www.python.org/ftp/python/3.10.2/python-3.10.2-amd64.exe' // Download Python installer
-                bat 'start python-installer.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0' // Install Python
+                script {
+                    def pythonInstaller = 'python-installer.exe'
+                    def pythonInstallerUrl = 'https://www.python.org/ftp/python/3.10.2/python-3.10.2-amd64.exe'
+                    
+                    // Download Python installer
+                    bat "curl -o ${pythonInstaller} ${pythonInstallerUrl}"
+                    
+                    // Install Python
+                    bat "start ${pythonInstaller} /quiet InstallAllUsers=1 PrependPath=1 Include_test=0"
+                    
+                    // Wait for Python installation to complete
+                    timeout(time: 15, unit: 'MINUTES') {
+                        def installerProcess = "tasklist /FI \"IMAGENAME eq ${pythonInstaller}\" | findstr ${pythonInstaller}".execute()
+                        def installerExitCode = installerProcess.waitFor()
+
+                        if (installerExitCode == 0) {
+                            echo "Python installation is still in progress. Waiting..."
+                            sleep(30) // Adjust the sleep duration based on installation time
+                        }
+                    }
+                }
             }
         }
 
