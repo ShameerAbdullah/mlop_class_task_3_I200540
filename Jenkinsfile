@@ -17,8 +17,7 @@ pipeline {
 
         stage('Wait for Python installation') {
             steps {
-                // Wait for Python installation to complete
-                bat 'timeout /t 120'
+                bat 'ping 127.0.0.1 -n 121 > nul' // Wait for 120 seconds
             }
         }
 
