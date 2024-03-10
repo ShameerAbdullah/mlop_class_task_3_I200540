@@ -4,25 +4,32 @@ pipeline {
     stages {
         stage('Setting of runner') {
             steps {
-                echo 'runs-on: windows-latest' // Assuming you are running Jenkins on a Windows agent
+                echo 'runs-on: windows-latest'
+            }
+        }
+
+        stage('Download and install Python') {
+            steps {
+                bat 'curl -o python-installer https://www.python.org/ftp/python/3.10.2/python-3.10.2-amd64.exe' // Download Python installer
+                bat 'python-installer /quiet InstallAllUsers=1 PrependPath=1 Include_test=0' // Install Python
             }
         }
 
         stage('Set up python environment') {
             steps {
-                bat 'python --version' // Using 'python' instead of 'python3' for Windows
+                bat 'python --version'
             }
         }
 
         stage('Installing dependencies') {
             steps {
-                bat 'pip install -r requirements.txt' // Using 'pip' instead of 'pip3' for Windows
+                bat 'pip install -r requirements.txt'
             }
         }
 
         stage('Executing test cases') {
             steps {
-                bat 'python main.py' // Assuming 'main.py' is the main script to execute
+                bat 'python main.py'
             }
         }
     }
