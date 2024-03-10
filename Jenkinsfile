@@ -10,10 +10,8 @@ pipeline {
 
         stage('Download and install Python') {
             steps {
-                bat 'curl -o python-installer.exe https://www.python.org/ftp/python/3.10.2/python-3.10.2-amd64.exe'
-                bat 'start python-installer.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0'
-                // Wait for Python installation to complete
-                bat 'timeout 120'
+                bat 'curl -o python-installer.exe https://www.python.org/ftp/python/3.10.2/python-3.10.2-amd64.exe' // Download Python installer
+                bat 'start python-installer.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0' // Install Python
             }
         }
 
